@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration status="debug">
+    <Properties>
+        <Property name="logdir">${sys:catalina.base}/logs</Property>
+        <Property name="layout">%d [%t] %-5p %c-%m%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="${layout}" />
+        </Console>
+        <RollingFile name="CATALINA" fileName="${logdir}/catalina.log"
+            filePattern="${logdir}/catalina.%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${layout}" />
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+            <SizeBasedTriggeringPolicy size="50MB" />
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <RollingFile name="LOCALHOST" fileName="${logdir}/localhost.log"
+            filePattern="${logdir}/localhost.%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${layout}" />
+            <SizeBasedTriggeringPolicy size="50MB" />
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger
+            name="org.apache.catalina.core.ContainerBase.[Catalina].[localhost]"
+            level="info">
+            <AppenderRef ref="LOCALHOST" />
+        </Logger>
+        <Root level="debug">
+            <AppenderRef ref="CATALINA" />
+            <AppenderRef ref="CONSOLE" />
+        </Root>
+    </Loggers>
+</Configuration>
